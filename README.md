@@ -1,4 +1,4 @@
-#S. aureus genomic analysis#
+# S. aureus genomic analysis #
 
 #checM for bacterial contamination assessment
 checkm lineage_wf -x fasta input_bins output_folder
