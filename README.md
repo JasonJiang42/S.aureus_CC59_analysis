@@ -1,7 +1,17 @@
-# S. aureus genomic analysis #
+# S. aureus CC59 genomic analysis #
+This repository outlines the analysis pipeline for the paper S. Jiang. et al. Global emergence and evolution of Staphylococcus aureus clonal complex 59 （in review)
 
-#checM for bacterial contamination assessment
-checkm lineage_wf -x fasta input_bins output_folder
+## Genome assembly and QC assessment ##
+High-quality reads were assembled using SPAdes (https://github.com/ablab/spades)  
+```
+python spades.py --pe1-1 file1 --pe1-2 file2 -o assmebly --careful -k 21,33,55,77,99,127
+```
+Species confirmation by GTDB-Tk (https://github.com/Ecogenomics/GTDBTk)  
+```
+!\gtdbtk classify --genome_dir genomes --align_dir /tmp/gtdbtk/align --out_dir /tmp/gtdbtk/classify -x gz --cpus 2 (--skip_ani_screen
+```
+
+
 
 #ARGs and VF identification
 abricate --db virulence_factor_db input_fasta > vf.tab
