@@ -1,5 +1,4 @@
-# Selection of Bacterial isolates
-All S. aureus were downloaded from NCBI using searching strategy "Staphylococcus aureus". CC59 isolates were identified based on MLST pattern.
+#S. aureus genomic analysis#
 
 #checM for bacterial contamination assessment
 checkm lineage_wf -x fasta input_bins output_folder
