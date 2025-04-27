@@ -43,28 +43,28 @@ run_gubbins.py -p gubbins clean.full.aln
 snp-sites -c gubbins.filtered_polymorphic_sites.fasta > clean.core.aln
 iqtree -s clean.core.aln --boot-trees --wbtl -m GTR+I+G -B 1000 -nt 18
 ```
+## Genomic population ##
+```
+library(fastbaps)
+library(ape)
+
+fasta.file.name <- system.file("extdata", "seqs.fa", package = "fastbaps")
+sparse.data <- import_fasta_sparse_nt(fasta.file.name)
+sparse.data <- optimise_prior(sparse.data, type = "optimise.symmetric")
+baps.hc <- fast_baps(sparse.data)
+clusters <- best_baps_partition(sparse.data, as.phylo(baps.hc))
+```
+## GWAS analysis ##
+The GWAS was conducted on pangenome and k-mer association parallelly.
+Pangenome was retrieved from roary and the gene_presence_absence.csv and traits file were input into scoary (https://github.com/AdmiralenOla/Scoary).
+```
+scoary -g gene_presence_absence.csv -t traits.csv -c BH --no_pairwise
+```
+Pyseer was used for K-mer based analysis and tutorial can be accessed in (https://pyseer.readthedocs.io/en/master/tutorial.html#k-mer-association-with-mixed-effects-model)
+ 
+## Prophage analysis ##
+
+## Evolutionary analysis ##
 
 
-#GWAS analysis
-prokka --outdir output_folder --force --prefix name --addgenes --compliant --cpus 12 input_fasta
-roary -e -mafft -p 12 input_gff
-scoary -g gene_presence_absence.csv -t traits_file -p 1E-5 -c BH --no_pairwise -o output_folder
-macsyfinder --db-type ordered_replicon --sequence-db input_faster --models CONJScan -o output_folder -w 12
-isescan.py --seqfile input_fasta --output output_folder --nthread 12
-Prophage date retrival from PHASTEST using PHASTEST_API.sh
-mash triangle -E -s 5000 -k 13 input_fasta > /path/to/edgelist.tsv
-
-#Phylogenetic analysis
-snippy --outdir output_folder --ref ref.db --ctgs input_fasta --force --cpus 12 --ram 12 --prefix name --report
-snippy-core --ref ref.gb input_fasta
-snippy-clean_full_aln core.full.aln > clean.full.aln
-run_gubbins.py -p gubbins clean.full.aln
-snp-sites -c gubbins.filtered_polymorphic_sites.fasta > clean.core.aln
-iqtree -s snp.aln.phylip --boot-trees --wbtl -m GTR+I+G -B 1000 -nt 64
-
-#Phylogeographic Analysis
-BEAST2 v2.7.3 was used for tree generation with setting of HKY model, optimal relaxed clock, coalescent constant population model and a Markov chain Monte Carlo (MCMC).
-Tracer was used for quality evaluation with ESS over 200.
-select gene alignment format was converted to PAML format in analysis using dna2paml.py
-PAML analysis was conducted using setting file codeml.ctl
 
