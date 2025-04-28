@@ -55,16 +55,51 @@ baps.hc <- fast_baps(sparse.data)
 clusters <- best_baps_partition(sparse.data, as.phylo(baps.hc))
 ```
 ## GWAS analysis ##
-The GWAS was conducted on pangenome and k-mer association parallelly.
-Pangenome was retrieved from roary and the gene_presence_absence.csv and traits file were input into scoary (https://github.com/AdmiralenOla/Scoary).
+The GWAS was conducted simultaneously on the pangenome and k-mer association.
+Pangenome was retrieved from roary and the gene_presence_absence.csv and traits file were input into Scoary (https://github.com/AdmiralenOla/Scoary).
 ```
 scoary -g gene_presence_absence.csv -t traits.csv -c BH --no_pairwise
 ```
-Pyseer was used for K-mer based analysis and tutorial can be accessed in (https://pyseer.readthedocs.io/en/master/tutorial.html#k-mer-association-with-mixed-effects-model)
+Pyseer was used for K-mer-based analysis and the tutorial can be accessed in (https://pyseer.readthedocs.io/en/master/tutorial.html#k-mer-association-with-mixed-effects-model)
  
 ## Prophage analysis ##
-
+The intact prophage was retrieved from PHASTEST using ```PHATEST_API.sh```
+```
+bash phastest_api.sh --submitjob --inputDir ./00.fnafiles
+bash phastest_api.sh --getresults --outDir ./01.phastest_results
+```
+Pharokka was used to annotate all intact prophages and the pangenome was generated using Roary.
+```
+pharokka.py -i prophage.fasta -o outdir -d path/to/database_dir -t 16 --fast
+roary –i 90 –f output_dir *.gff
+```
+The network of community pangenome was generated following (https://github.com/JDHarlingLee/GraPPLE). Briefly, the ```gene_presence_absence.csv``` from roary was converted into binary matrix using ```gene_matrix_to_binary.py``` 
+```
+python gene_matrix_to_binary.py -i gene_presence_absence.csv -o binary_presc_absc.tsv --start_col 15 --delimiter ","
+```
+Then, the pairwise similarity between genomes from a binary matrix was calculated using ```pw_similarity.py```
+```
+python pw_similarity.py -i binary_presc_absc.tsv -o example1 -r "isolates" -s "jaccard" -f 0.5
+```
 ## Evolutionary analysis ##
-
-
-
+The temporal origins of CC59 genomes were estimated using BactDating (https://github.com/xavierdidelot/BactDating)
+```
+library(ape)
+tree=read.tree('filename.nwk')
+year <- scan(input_file, what = numeric(), quiet = TRUE)
+res=bactdate(tree,year)
+```
+The geographical transmission patterns were esimated using TreeTime with mugration model (https://treetime.readthedocs.io/en/latest/tutorials/mugration.html)
+```
+treetime mugration --tree tree.nwk --states metadata.csv --attribute country
+```
+The phylodynamic inference of effective population size was conduced using Skygrowth (https://github.com/mrc-ide/skygrowth)
+```
+require(skygrowth)
+require(ape)
+require(ggplot2)
+tree <- read.tree("your_tree_file.nwk")
+mcmcfit <- skygrowth.mcmc( tree)
+```
+## Other Analysis ###
+For network visualisation, we used Cytoscape (https://github.com/cytoscape/cytoscape). The software can also be used for calculating network descriptive statistics. All plots were generated using ggplot2 (https://ggplot2.tidyverse.org/).
