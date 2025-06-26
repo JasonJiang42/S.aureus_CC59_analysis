@@ -89,7 +89,7 @@ tree=read.tree('filename.nwk')
 year <- scan(input_file, what = numeric(), quiet = TRUE)
 res=bactdate(tree,year)
 ```
-The geographical transmission patterns were esimated using TreeTime with mugration model (https://treetime.readthedocs.io/en/latest/tutorials/mugration.html)
+The geographical transmission patterns were estimated using TreeTime with mugration model (https://treetime.readthedocs.io/en/latest/tutorials/mugration.html)
 ```
 treetime mugration --tree tree.nwk --states metadata.csv --attribute country
 ```
