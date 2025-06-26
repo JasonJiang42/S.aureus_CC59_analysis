@@ -93,7 +93,7 @@ The geographical transmission patterns were esimated using TreeTime with mugrati
 ```
 treetime mugration --tree tree.nwk --states metadata.csv --attribute country
 ```
-The phylodynamic inference of effective population size was conduced using Skygrowth (https://github.com/mrc-ide/skygrowth)
+The phylodynamic inference of effective population size was conducted using Skygrowth (https://github.com/mrc-ide/skygrowth)
 ```
 require(skygrowth)
 require(ape)
